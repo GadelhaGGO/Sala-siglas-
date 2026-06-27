@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulado de Siglas - Frota P</title>
+<style>
+*{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#eef2f7;color:#172033} header{position:sticky;top:0;z-index:10;background:#172033;color:white;padding:14px 16px;box-shadow:0 2px 8px #0003} h1{font-size:20px;margin:0 0 4px}.sub{font-size:13px;opacity:.9}.wrap{max-width:760px;margin:auto;padding:14px}.card{background:#fff;border-radius:14px;margin:12px 0;padding:14px;box-shadow:0 2px 10px #0001;border:1px solid #dde3ec}.qtitle{font-weight:700;margin-bottom:10px;line-height:1.35}.opt{display:block;margin:8px 0;padding:11px;border:1px solid #ccd5e2;border-radius:10px;background:#f9fbfe}.opt input{margin-right:8px}.bar{position:sticky;bottom:0;background:#fff;padding:10px;border-top:1px solid #d8dee9;box-shadow:0 -2px 8px #0001}.btn{width:100%;border:0;border-radius:12px;background:#0b63ce;color:#fff;font-size:18px;font-weight:700;padding:14px}.btn:active{transform:scale(.99)}#resultado{display:none}.ok{background:#e8f7ee;border-color:#6fc58b}.bad{background:#fdeaea;border-color:#e58a8a}.resumo{font-size:18px;font-weight:700}.small{font-size:13px;color:#5b6675}.tag{display:inline-block;background:#e9f1ff;color:#0b63ce;border-radius:999px;padding:4px 9px;font-size:12px;font-weight:700;margin-top:6px}.topbtn{margin-top:8px;background:#223047}.hidden{display:none}
+</style>
+</head>
+<body>
+<header>
+<h1>Simulado de Siglas - Frota P</h1>
+<div class="sub">50 perguntas • sem siglas de estações • foco em memorização</div>
+</header>
+<div class="wrap">
+<div id="resultado" class="card"></div>
+<div id="quiz"></div>
+</div>
+<div class="bar">
+<button class="btn" onclick="finalizar()">Finalizar simulado</button>
+<button class="btn topbtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">Voltar ao topo</button>
+</div>
+<script>
+const questoes = [
+{q:'O que significa AM?',a:'Modalidade Automática do CBTC',o:['Modalidade Automática do CBTC','Alarme Manual','Abertura Manual','Área de Manobra']},
+{q:'O que significa AFE?',a:'Manopla de destravamento do freio de estacionamento',o:['Manopla de destravamento do freio de estacionamento','Alarme de falha elétrica','Aplicação de freio emergencial','Abertura de freio eletrônico']},
+{q:'O que significa A-REB?',a:'Auto Reboque',o:['Auto Reboque','Alarme de Reboque','Abertura de Emergência de Banco','Autorização de Retorno']},
+{q:'O que significa APLOP?',a:'Abertura de Porta do Lado Oposto à Plataforma',o:['Abertura de Porta do Lado Oposto à Plataforma','Abertura Programada Local de Porta','Alarme de Porta Local Operacional','Autorização de Parada Longa']},
+{q:'O que significa ATS?',a:'Supervisão Automática dos trens',o:['Supervisão Automática dos trens','Sistema de tração auxiliar','Alarme total de segurança','Abertura temporizada do salão']},
+{q:'O que significa ATP?',a:'Proteção Automática do trem',o:['Proteção Automática do trem','Painel de tração principal','Autorização temporária de portas','Alarme de tensão pneumática']},
+{q:'O que significa BCE?',a:'Unidade Controladora de Freios',o:['Unidade Controladora de Freios','Banco de controle elétrico','Botoeira de cabine esquerda','Bloqueio de comando emergencial']},
+{q:'O que significa BCU?',a:'Unidade Controladora de Suspensão',o:['Unidade Controladora de Suspensão','Unidade controladora de portas','Banco central de urgência','Base de comando universal']},
+{q:'O que significa BX?',a:'Baixa Aderência',o:['Baixa Aderência','Bloqueio externo','Bateria auxiliar','Bypass de tração']},
+{q:'O que significa CVS?',a:'Conversor Auxiliar',o:['Conversor Auxiliar','Controle visual do salão','Comando de velocidade segura','Chave de ventilação do salão']},
+{q:'O que significa CBTC?',a:'Controle de Trem Baseado em Comunicação',o:['Controle de Trem Baseado em Comunicação','Comando de botoeiras e tração central','Controle básico de tração do carro','Circuito de bloqueio total da cabine']},
+{q:'O que significa CAB-CAB?',a:'Intercomunicador entre cabines',o:['Intercomunicador entre cabines','Controle de abertura de cabine','Câmera auxiliar da cabine','Comando automático de buzina']},
+{q:'O que significa CAM ESP?',a:'Câmeras Especiais',o:['Câmeras Especiais','Comando de emergência superior','Câmera de estação principal','Canal auxiliar de mensagens']},
+{q:'O que significa CS?',a:'Chave de Serviço',o:['Chave de Serviço','Controle de suspensão','Comando sonoro','Circuito de segurança']},
+{q:'O que significa CO?',a:'Chaves Operacionais',o:['Chaves Operacionais','Controle obrigatório','Cabine oposta','Comando oculto']},
+{q:'O que significa CEG?',a:'Chave de Energização Geral',o:['Chave de Energização Geral','Controle elétrico do gerador','Comando emergencial geral','Circuito externo geral']},
+{q:'O que significa CCU?',a:'Módulo que administra a rede DATA-BUS e executa o TCMS',o:['Módulo que administra a rede DATA-BUS e executa o TCMS','Chave central única','Controle de comunicação do usuário','Circuito de câmera universal']},
+{q:'O que significa CFTV?',a:'Circuito fechado de TV',o:['Circuito fechado de TV','Comando final de tração veicular','Controle de freio total do veículo','Chave de falha do trem vazio']},
+{q:'O que significa DATA-BUS?',a:'Rede de comunicação do trem',o:['Rede de comunicação do trem','Banco de dados das estações','Derivação automática de tração','Diagnóstico auxiliar de bateria']},
+{q:'O que significa DPT?',a:'Derivação de Portas',o:['Derivação de Portas','Desligamento do pantógrafo','Disjuntor principal de tração','Direção programada do trem']},
+{q:'O que significa DDU?',a:'Monitores de vídeo da cabine',o:['Monitores de vídeo da cabine','Dispositivo de destravamento único','Derivação de dados do usuário','Diagnóstico de unidade de porta']},
+{q:'O que significa DCU?',a:'Unidade Controladora de Porta',o:['Unidade Controladora de Porta','Disjuntor de cabine universal','Controle de direção urbana','Derivação central única']},
+{q:'O que significa DUR?',a:'Disjuntor Ultrarrápido',o:['Disjuntor Ultrarrápido','Dispositivo de uso restrito','Derivação urgente de reboque','Defeito único de rede']},
+{q:'O que significa DCS?',a:'Micro Switch de Porta Fechada',o:['Micro Switch de Porta Fechada','Disjuntor de comando do salão','Detecção central de suspensão','Derivação de comunicação segura']},
+{q:'O que significa DLS?',a:'Micro Switch de Porta Travada',o:['Micro Switch de Porta Travada','Dispositivo lateral de socorro','Derivação local de sistema','Disjuntor de luz do salão']},
+{q:'O que significa DRV?',a:'Restrição de 30 km/h isolada no armário elétrico',o:['Restrição de 30 km/h isolada no armário elétrico','Derivação rápida de velocidade','Dispositivo de reversão do veículo','Diagnóstico do rádio VHF']},
+{q:'O que significa FE?',a:'Freio de Emergência',o:['Freio de Emergência','Falha elétrica','Freio estacionado','Fonte externa']},
+{q:'O que significa FFR?',a:'Freio Falha Remoção',o:['Freio Falha Remoção','Falha final de rede','Freio fixo rearmado','Função freio reverso']},
+{q:'O que significa FFA?',a:'Freio Falha Aplicação',o:['Freio Falha Aplicação','Falha final automática','Freio fora de atuação','Função de fluxo de ar']},
+{q:'O que significa FRE?',a:'Freio de serviço isolado no painel de chaves interno',o:['Freio de serviço isolado no painel de chaves interno','Freio de emergência aplicado','Falha de rádio embarcado','Função de reboque externo']},
+{q:'O que significa FPI?',a:'Freio de Emergência isolado pela chave Reboque Isolação Cabeceira',o:['Freio de Emergência isolado pela chave Reboque Isolação Cabeceira','Falha de porta individual','Freio pneumático interno','Função pantógrafo isolado']},
+{q:'O que significa HSCB?',a:'Disjuntor de proteção dos motores de tração',o:['Disjuntor de proteção dos motores de tração','Controle de câmeras do salão','Chave de buzina da cabine','Sistema de comunicação do operador']},
+{q:'O que significa I/O?',a:'Módulo de entrada e saída',o:['Módulo de entrada e saída','Isolação operacional','Indicação de ocorrência','Interface de operação']},
+{q:'O que significa IC?',a:'Isolação de Cabeceira',o:['Isolação de Cabeceira','Intercomunicador de cabine','Iluminação de carro','Indicação de câmera']},
+{q:'O que significa INTERCOM?',a:'Intercomunicador',o:['Intercomunicador','Controle de tração','Indicador de portas','Inversor do compressor']},
+{q:'O que significa IPT?',a:'Isolamento elétrico de portas',o:['Isolamento elétrico de portas','Indicador principal de tração','Interface de painel do trem','Isolação pneumática total']},
+{q:'O que significa MCS?',a:'Modalidade Semiautomática do CBTC',o:['Modalidade Semiautomática do CBTC','Modo de controle do salão','Movimento controlado de serviço','Monitor central de segurança']},
+{q:'O que significa MAN?',a:'Modalidade Manual',o:['Modalidade Manual','Manutenção automática normal','Monitoramento ativo noturno','Movimento autorizado neutro']},
+{q:'O que significa MVB?',a:'Rede de comunicação de dados do trem',o:['Rede de comunicação de dados do trem','Modo de velocidade baixa','Monitor visual de bordo','Módulo de válvula de bateria']},
+{q:'O que significa PA?',a:'Anúncio ao Público',o:['Anúncio ao Público','Porta aberta','Painel auxiliar','Proteção automática']},
+{q:'O que significa PSD?',a:'Portas de Plataforma',o:['Portas de Plataforma','Painel de sinalização dianteira','Proteção superior de dados','Parada segura do trem']},
+{q:'O que significa PTT?',a:'Aperte para falar',o:['Aperte para falar','Porta travada total','Painel de tração do trem','Permissão de troca de trem']},
+{q:'O que significa R1?',a:'1 carro com falha de freio ou isolado',o:['1 carro com falha de freio ou isolado','Rádio canal 1','Reboque em 1 trem','Restrição de uma porta']},
+{q:'O que significa R2?',a:'2 carros com falha de freio ou isolados',o:['2 carros com falha de freio ou isolados','Rádio canal 2','Reboque em 2 trens','Restrição de duas portas']},
+{q:'O que significa TD?',a:'Trem Direto',o:['Trem Direto','Tração desligada','Tempo de descarga','Tela direita']},
+{q:'O que significa TG?',a:'Tacogerador ou Tacógrafo',o:['Tacogerador ou Tacógrafo','Tração geral','Tensão garantida','Trem guiado']},
+{q:'O que significa TCMS?',a:'Sistema de Monitoramento e Controle do trem',o:['Sistema de Monitoramento e Controle do trem','Tela central de manutenção e socorro','Transmissão de comando manual seguro','Teste de câmeras do salão']},
+{q:'O que significa V1?',a:'Indicação de Isolação de Cabeceira',o:['Indicação de Isolação de Cabeceira','Válvula principal aberta','Velocidade 1 liberada','Via 1 ocupada']},
+{q:'O que significa V6?',a:'Indicação de Isolação de Freio Pneumático',o:['Indicação de Isolação de Freio Pneumático','Velocidade 6 autorizada','Válvula de portas do carro 6','Via 6 protegida']},
+{q:'O que significa VATC-A ou VATC-B?',a:'Controle automático do trem',o:['Controle automático do trem','Válvula automática de tração central','Vídeo auxiliar da tela CBTC','Verificação automática de portas']}
+];
+function embaralhar(arr){return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1])}
+function montar(){const quiz=document.getElementById('quiz'); quiz.innerHTML=''; questoes.forEach((it,i)=>{let opts=embaralhar(it.o); let div=document.createElement('div'); div.className='card'; div.id='q'+i; div.innerHTML=`<div class="qtitle">${i+1}. ${it.q}</div>`+opts.map(op=>`<label class="opt"><input type="radio" name="q${i}" value="${op.replace(/"/g,'&quot;')}">${op}</label>`).join(''); quiz.appendChild(div);});}
+function finalizar(){let acertos=0, respondidas=0; questoes.forEach((it,i)=>{let card=document.getElementById('q'+i); card.classList.remove('ok','bad'); let sel=document.querySelector(`input[name=q${i}]:checked`); if(sel){respondidas++; if(sel.value===it.a){acertos++; card.classList.add('ok')} else {card.classList.add('bad')}} else {card.classList.add('bad')} let antigo=card.querySelector('.corr'); if(antigo) antigo.remove(); let corr=document.createElement('div'); corr.className='corr'; corr.innerHTML=`<div class="tag">Resposta correta: ${it.a}</div>`; card.appendChild(corr);}); let pct=Math.round((acertos/questoes.length)*100); let res=document.getElementById('resultado'); res.style.display='block'; res.innerHTML=`<div class="resumo">Pontuação: ${acertos}/${questoes.length} (${pct}%)</div><p>Respondidas: ${respondidas}/50</p><p class="small">Revise os cartões em vermelho. O objetivo aqui é decorar a sigla e ligar rápido com a função correta.</p>`; window.scrollTo({top:0,behavior:'smooth'});}
+montar();
+</script>
+</body>
+</html>
